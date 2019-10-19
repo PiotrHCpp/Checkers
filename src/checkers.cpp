@@ -2,12 +2,21 @@
 #include "checkers.hpp"
 #include "checkersMove.hpp"
 
-bool Checkers::tryLocalMove(Move m)
+bool Checkers::isMoveValid(Move m) const
 {
     CheckersMove move(m);
-    if ( 5 == move.getFieldDifference() or (4 == move.getFieldDifference() and move.getStartingField() %10 != 6))
+    const bool isStoneOnTheLeftEdge = 6 == move.getStartingField() %10;
+    const bool isMoveToTheDownLeft = 4 == move.getFieldDifference();
+    const bool isMoveToTheDownRight = 5 == move.getFieldDifference();
+    return ( isMoveToTheDownRight or (isMoveToTheDownLeft and !isStoneOnTheLeftEdge) );
+}
+
+
+bool Checkers::tryLocalMove(Move move)
+{
+    if (isMoveValid(move))
     {
-        networkClientSender->sendToOpponent(m);
+        networkClientSender->sendToOpponent(move);
         return true;
     }
     return false;

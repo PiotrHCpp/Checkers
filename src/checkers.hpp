@@ -7,5 +7,6 @@ class Checkers : public MoveExecutor
 
 public:
     Checkers(NetworkClientSender* n) : networkClientSender(n) {};
+    bool isMoveValid(Move m) const;
     bool tryLocalMove(Move) override;
 };
