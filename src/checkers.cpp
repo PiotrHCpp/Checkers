@@ -14,6 +14,7 @@ bool Checkers::isMoveValid(Move m) const
 void Checkers::receiveFromOpponent(Move move)
 {
     uiUpdater.updateGameState(move);
+    isMyTurn = true;
 }
 
 bool Checkers::tryLocalMove(Move move)
