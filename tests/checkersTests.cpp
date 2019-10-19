@@ -18,6 +18,9 @@ struct CheckersTests : public testing::Test
     // NetworkClientSenderMock networkClientSenderMock;
     testing::StrictMock<NetworkClientSenderMock> networkClientSenderMock;
     testing::StrictMock<UiUpdaterMock> uiUpdaterMock;
+    MoveExecutor& moveExecutor = checkers;
+    NetworkClientReceiver& networkClientReceiver = checkers;
+
     Checkers checkers;
     
     CheckersTests() : checkers(Checkers(networkClientSenderMock, uiUpdaterMock))
@@ -26,27 +29,20 @@ struct CheckersTests : public testing::Test
     void checkValidMove(const Move& move)
     {
         EXPECT_CALL(networkClientSenderMock, sendToOpponent(move));
-        ASSERT_TRUE(checkers.tryLocalMove(move));
+        ASSERT_TRUE(moveExecutor.tryLocalMove(move));
     }
 };
-
-TEST_F(CheckersTests, MoveExecutorInterfaceIsImplemented)
-{
-    MoveExecutor& moveExecutor = checkers;
-    Move someMove = "10-50";
-    moveExecutor.tryLocalMove(someMove);
-}
 
 TEST_F(CheckersTests, checkersMusntAllowInvalidMove)
 {
     Move someInvalidMove = "18-29";
-    ASSERT_FALSE(checkers.tryLocalMove(someInvalidMove));
+    ASSERT_FALSE(moveExecutor.tryLocalMove(someInvalidMove));
 }
 
 TEST_F(CheckersTests, cantAllowMoveOutOfEdge)
 {
     Move someInvalidMove = "16-20";
-    ASSERT_FALSE(checkers.tryLocalMove(someInvalidMove));
+    ASSERT_FALSE(moveExecutor.tryLocalMove(someInvalidMove));
 }
 
 struct CheckersTestValidMoves : public CheckersTests, public ::testing::WithParamInterface<Move>
@@ -65,14 +61,13 @@ TEST_F(CheckersTests, whiteCantMoveTwoTimesInARow)
     Move whiteValidMove = "19-23";
     Move secondWhiteValidMove = "18-22";
     checkValidMove(whiteValidMove);
-    ASSERT_FALSE(checkers.tryLocalMove(secondWhiteValidMove));    
+    ASSERT_FALSE(moveExecutor.tryLocalMove(secondWhiteValidMove));    
 }
 
 TEST_F(CheckersTests, moveFromNetworkShouldUpdateUi)
 {
     Move whiteValidMove = "19-23";
     EXPECT_CALL(uiUpdaterMock, updateGameState(whiteValidMove));
-    NetworkClientReceiver& networkClientReceiver = checkers;
     networkClientReceiver.receiveFromOpponent(whiteValidMove);
 }
 
@@ -84,6 +79,6 @@ TEST_F(CheckersTests, whiteCanMoveSecondTimeAfterBlacksMove)
 
     checkValidMove(whiteValidMove);
     EXPECT_CALL(uiUpdaterMock, updateGameState(blackValidMove));
-    checkers.receiveFromOpponent(blackValidMove);
+    networkClientReceiver.receiveFromOpponent(blackValidMove);
     checkValidMove(secondWhiteValidMove);
 }
