@@ -1,0 +1,16 @@
+language: cpp
+dist: bionic
+
+os: 
+  - linux
+
+compiler:
+  - clang
+  - g++
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - ./checkers-ut
