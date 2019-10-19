@@ -57,7 +57,9 @@ project(checkers)
 
 set(TEST_SRC_LIST
   src/checkers.cpp
+  src/checkersMove.cpp
   tests/checkersTests.cpp 
+  tests/checkersMoveTests.cpp
 )
 
 link_libraries(gtest)
