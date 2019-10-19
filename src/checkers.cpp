@@ -2,5 +2,5 @@
 
 bool Checkers::tryLocalMove(Move)
 {
-    return true;
+    return false;
 }
