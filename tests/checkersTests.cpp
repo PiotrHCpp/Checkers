@@ -52,4 +52,4 @@ TEST_P(CheckersTestValidMoves, test)
     checkValidMove(GetParam());
 }
 
-INSTANTIATE_TEST_CASE_P(P, CheckersTestValidMoves, ::testing::Values("18-23", "16-21", "19-23"));
+INSTANTIATE_TEST_SUITE_P(P, CheckersTestValidMoves, ::testing::Values("18-23", "16-21", "19-23"));
