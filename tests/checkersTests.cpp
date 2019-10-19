@@ -13,8 +13,15 @@ struct CheckersTests : public testing::Test
     // NetworkClientSenderMock networkClientSenderMock;
     testing::StrictMock<NetworkClientSenderMock> networkClientSenderMock;
     Checkers checkers;
+    
     CheckersTests() : checkers(Checkers(&networkClientSenderMock))
     { }
+
+    void checkValidMove(const Move& move)
+    {
+        EXPECT_CALL(networkClientSenderMock, sendToOpponent(move));
+        ASSERT_TRUE(checkers.tryLocalMove(move));
+    }
 };
 
 TEST_F(CheckersTests, checkersMusntAllowInvalidMove)
@@ -32,7 +39,10 @@ TEST_F(CheckersTests, MoveExecutorInterfaceIsImplemented)
 
 TEST_F(CheckersTests, checkersMustAllowValidMove)
 {
-    Move someValidMove = "18-23";
-    EXPECT_CALL(networkClientSenderMock, sendToOpponent(someValidMove));
-    ASSERT_TRUE(checkers.tryLocalMove(someValidMove));
+    checkValidMove("18-23");
+}
+
+TEST_F(CheckersTests, checkersMustAllowAnotherValidMove)
+{
+    checkValidMove("16-21");
 }
