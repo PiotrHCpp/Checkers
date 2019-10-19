@@ -7,6 +7,7 @@ public:
     CheckersMove(const Move& move);
     unsigned getStartingField() const;
     unsigned getLandingField() const;
+    unsigned getFieldDifference() const;
 
 private:
     unsigned startingField;

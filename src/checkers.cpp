@@ -5,7 +5,7 @@
 bool Checkers::tryLocalMove(Move m)
 {
     CheckersMove move(m);
-    if ( 5 == move.getLandingField() - move.getStartingField() )
+    if ( 5 == move.getFieldDifference() or 4 == move.getFieldDifference() )
     {
         networkClientSender->sendToOpponent(m);
         return true;
