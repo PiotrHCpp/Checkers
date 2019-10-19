@@ -8,9 +8,8 @@ bool Checkers::isMoveValid(Move m) const
     const bool isStoneOnTheLeftEdge = 6 == move.getStartingField() %10;
     const bool isMoveToTheDownLeft = 4 == move.getFieldDifference();
     const bool isMoveToTheDownRight = 5 == move.getFieldDifference();
-    const bool foo = -5 == move.getFieldDifference();
-    
-    return ( isMoveToTheDownRight or foo or (isMoveToTheDownLeft and !isStoneOnTheLeftEdge) );
+    const bool isMoveToTheUpLeft = -5 == move.getFieldDifference();
+    return ( isMoveToTheDownRight or isMoveToTheUpLeft or (isMoveToTheDownLeft and !isStoneOnTheLeftEdge) );
 }
 
 void Checkers::receiveFromOpponent(Move move)
