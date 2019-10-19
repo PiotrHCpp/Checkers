@@ -108,9 +108,12 @@ TEST_F(CheckersTestsWhenBlacksAreMine, BlacksCanMoveToTheRight)
     checkLocalValidMove(blackValidMove);
 }
 
-TEST_F(CheckersTestWhenWhitesAreMine, cantAllowMoveOutOfTheRightEdge)
+TEST_F(CheckersTestsWhenBlacksAreMine, cantAllowMoveOutOfTheRightEdge)
 {
+    Move whiteValidMove = "19-23";
     Move someInvalidMove = "35-31";
+
+    checkReceivedMove(whiteValidMove);
     ASSERT_FALSE(moveExecutor.tryLocalMove(someInvalidMove));
 }
 
