@@ -10,7 +10,8 @@ struct NetworkClientSenderMock : public NetworkClientSender
 
 struct CheckersTests : public testing::Test
 {
-    NetworkClientSenderMock networkClientSenderMock;
+    // NetworkClientSenderMock networkClientSenderMock;
+    testing::StrictMock<NetworkClientSenderMock> networkClientSenderMock;
     Checkers checkers;
     CheckersTests() : checkers(Checkers(&networkClientSenderMock))
     { }

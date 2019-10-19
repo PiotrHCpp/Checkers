@@ -2,8 +2,11 @@
 
 bool Checkers::tryLocalMove(Move moveInput)
 {
-    networkClientSender->sendToOpponent(moveInput);
-    if (moveInput == "18-23")
+    
+    if ((moveInput == "18-23") || (moveInput == "16-21"))
+    {
+        networkClientSender->sendToOpponent(moveInput);
         return true;
+    }
     return false;
 }
