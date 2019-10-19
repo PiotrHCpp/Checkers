@@ -69,12 +69,6 @@ TEST_F(CheckersTests, whiteCantMoveTwoTimesInARow)
     ASSERT_FALSE(moveExecutor.tryLocalMove(secondWhiteValidMove));    
 }
 
-TEST_F(CheckersTests, moveFromNetworkShouldUpdateUi)
-{
-    Move whiteValidMove = "19-23";
-    checkReceivedMove(whiteValidMove);
-}
-
 TEST_F(CheckersTests, whiteCanMoveSecondTimeAfterBlacksMove)
 {
     Move whiteValidMove = "19-23";
