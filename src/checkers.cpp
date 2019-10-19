@@ -13,14 +13,14 @@ bool Checkers::isMoveValid(Move m) const
 
 void Checkers::receiveFromOpponent(Move move)
 {
-    uiUpdater->updateGameState(move);
+    uiUpdater.updateGameState(move);
 }
 
 bool Checkers::tryLocalMove(Move move)
 {
     if (isMyTurn && isMoveValid(move))
     {
-        networkClientSender->sendToOpponent(move);
+        networkClientSender.sendToOpponent(move);
         isMyTurn = false;
         return true;
     }

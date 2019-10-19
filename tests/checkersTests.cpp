@@ -17,9 +17,10 @@ struct CheckersTests : public testing::Test
 {
     // NetworkClientSenderMock networkClientSenderMock;
     testing::StrictMock<NetworkClientSenderMock> networkClientSenderMock;
+    testing::StrictMock<UiUpdaterMock> uiUpdaterMock;
     Checkers checkers;
     
-    CheckersTests() : checkers(Checkers(&networkClientSenderMock))
+    CheckersTests() : checkers(Checkers(networkClientSenderMock, uiUpdaterMock))
     { }
 
     void checkValidMove(const Move& move)
@@ -70,9 +71,7 @@ TEST_F(CheckersTests, whiteCantMoveTwoTimesInARow)
 TEST_F(CheckersTests, moveFromNetworkShouldUpdateUi)
 {
     Move whiteValidMove = "19-23";
-    testing::StrictMock<UiUpdaterMock> uiUpdaterMock;
-    Checkers checkers2(&networkClientSenderMock, &uiUpdaterMock);
     EXPECT_CALL(uiUpdaterMock, updateGameState(whiteValidMove));
-    NetworkClientReceiver& networkClientReceiver = checkers2;
+    NetworkClientReceiver& networkClientReceiver = checkers;
     networkClientReceiver.receiveFromOpponent(whiteValidMove);
 }
