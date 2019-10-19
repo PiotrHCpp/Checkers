@@ -1,11 +1,13 @@
 #include <string>
 #include "checkers.hpp"
+#include "checkersMove.hpp"
 
-bool Checkers::tryLocalMove(Move move)
+bool Checkers::tryLocalMove(Move m)
 {
-    if ((move == "18-23") || (move == "16-21"))
+    CheckersMove move = toCheckersMove(m);
+    if ( 5 == move.landingField - move.startingField )
     {
-        networkClientSender->sendToOpponent(move);
+        networkClientSender->sendToOpponent(m);
         return true;
     }
     return false;

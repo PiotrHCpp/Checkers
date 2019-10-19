@@ -33,7 +33,7 @@ TEST_F(CheckersTests, checkersMusntAllowInvalidMove)
 TEST_F(CheckersTests, MoveExecutorInterfaceIsImplemented)
 {
     MoveExecutor& moveExecutor = checkers;
-    Move someMove = "";
+    Move someMove = "10-50";
     moveExecutor.tryLocalMove(someMove);
 }
 
