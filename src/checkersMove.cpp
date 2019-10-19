@@ -16,7 +16,7 @@ unsigned CheckersMove::getLandingField() const
     return landingField;
 }
 
-unsigned CheckersMove::getFieldDifference() const
+int CheckersMove::getFieldDifference() const
 {
     return landingField - startingField;
 }

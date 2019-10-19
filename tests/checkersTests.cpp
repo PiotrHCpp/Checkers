@@ -82,3 +82,13 @@ TEST_F(CheckersTests, whiteCanMoveSecondTimeAfterBlacksMove)
     networkClientReceiver.receiveFromOpponent(blackValidMove);
     checkValidMove(secondWhiteValidMove);
 }
+
+TEST_F(CheckersTests, BlacksCanMoveAfterReceivingWhitesMoveFromTheNetwork)
+{
+    Move whiteValidMove = "19-23";
+    Move blackValidMove = "33-28";
+
+    EXPECT_CALL(uiUpdaterMock, updateGameState(whiteValidMove));
+    networkClientReceiver.receiveFromOpponent(whiteValidMove);
+    checkValidMove(blackValidMove);
+}
