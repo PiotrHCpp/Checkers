@@ -2,8 +2,10 @@
 #include "checkers.hpp"
 #include "checkersMove.hpp"
 
-Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), isMyTurn(true), color(color)
-{ }
+Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color)
+{ 
+    isMyTurn = color == Color::white;
+}
 
 bool Checkers::isMoveValid(Move m) const
 {

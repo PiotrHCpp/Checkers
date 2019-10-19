@@ -124,3 +124,10 @@ TEST_F(CheckersTestWhenWhitesAreMine, whitesCantMoveBackwards)
     checkReceivedMove(blackValidMove);
     ASSERT_FALSE(moveExecutor.tryLocalMove(whiteBackwardMove));
 }
+
+TEST_F(CheckersTestsWhenBlacksAreMine, BlacksCantStart)
+{
+    Move blackValidMove = "33-29";
+    ASSERT_FALSE(moveExecutor.tryLocalMove(blackValidMove));
+}
+
