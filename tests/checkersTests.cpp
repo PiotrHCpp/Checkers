@@ -24,17 +24,23 @@ struct CheckersTests : public testing::Test
     }
 };
 
+TEST_F(CheckersTests, MoveExecutorInterfaceIsImplemented)
+{
+    MoveExecutor& moveExecutor = checkers;
+    Move someMove = "10-50";
+    moveExecutor.tryLocalMove(someMove);
+}
+
 TEST_F(CheckersTests, checkersMusntAllowInvalidMove)
 {
     Move someInvalidMove = "18-29";
     ASSERT_FALSE(checkers.tryLocalMove(someInvalidMove));
 }
 
-TEST_F(CheckersTests, MoveExecutorInterfaceIsImplemented)
+TEST_F(CheckersTests, cantAllowMoveOutOfEdge)
 {
-    MoveExecutor& moveExecutor = checkers;
-    Move someMove = "10-50";
-    moveExecutor.tryLocalMove(someMove);
+    Move someInvalidMove = "16-20";
+    ASSERT_FALSE(checkers.tryLocalMove(someInvalidMove));
 }
 
 struct CheckersTestValidMoves : public CheckersTests, public ::testing::WithParamInterface<Move>
