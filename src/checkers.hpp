@@ -1,7 +1,7 @@
 #pragma once
 #include "gameInterfaces.hpp"
 
-class Checkers
+class Checkers : public MoveExecutor
 {
 public:
     bool tryLocalMove(Move);
