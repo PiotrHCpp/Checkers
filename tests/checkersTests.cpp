@@ -22,7 +22,7 @@ struct CheckersTests : public testing::Test
 
     Checkers checkers;
     
-    CheckersTests() : checkers(Checkers(networkClientSenderMock, uiUpdaterMock))
+    CheckersTests(Checkers::Color color) : checkers(Checkers(networkClientSenderMock, uiUpdaterMock, color))
     { }
 
     void checkLocalValidMove(const Move& move)
@@ -38,19 +38,29 @@ struct CheckersTests : public testing::Test
     }
 };
 
-TEST_F(CheckersTests, checkersMusntAllowInvalidMove)
+struct CheckersTestsWhenBlacksAreMine : public CheckersTests
+{
+    CheckersTestsWhenBlacksAreMine() : CheckersTests(Checkers::Color::black) {}
+};
+
+struct CheckersTestWhenWhitesAreMine : public CheckersTests
+{
+    CheckersTestWhenWhitesAreMine() : CheckersTests(Checkers::Color::white) {}
+};
+
+TEST_F(CheckersTestWhenWhitesAreMine, checkersMusntAllowInvalidMove)
 {
     Move someInvalidMove = "18-29";
     ASSERT_FALSE(moveExecutor.tryLocalMove(someInvalidMove));
 }
 
-TEST_F(CheckersTests, cantAllowMoveOutOfLeftEdge)
+TEST_F(CheckersTestWhenWhitesAreMine, cantAllowMoveOutOfLeftEdge)
 {
     Move someInvalidMove = "16-20";
     ASSERT_FALSE(moveExecutor.tryLocalMove(someInvalidMove));
 }
 
-struct CheckersTestValidMoves : public CheckersTests, public ::testing::WithParamInterface<Move>
+struct CheckersTestValidMoves : public CheckersTestWhenWhitesAreMine, public ::testing::WithParamInterface<Move>
 {
 };
 
@@ -61,7 +71,7 @@ TEST_P(CheckersTestValidMoves, test)
 
 INSTANTIATE_TEST_SUITE_P(P, CheckersTestValidMoves, ::testing::Values("18-23", "16-21", "19-23"));
 
-TEST_F(CheckersTests, whiteCantMoveTwoTimesInARow)
+TEST_F(CheckersTestWhenWhitesAreMine, whiteCantMoveTwoTimesInARow)
 {
     Move whiteValidMove = "19-23";
     Move secondWhiteValidMove = "18-22";
@@ -69,7 +79,7 @@ TEST_F(CheckersTests, whiteCantMoveTwoTimesInARow)
     ASSERT_FALSE(moveExecutor.tryLocalMove(secondWhiteValidMove));    
 }
 
-TEST_F(CheckersTests, whiteCanMoveSecondTimeAfterBlacksMove)
+TEST_F(CheckersTestWhenWhitesAreMine, whiteCanMoveSecondTimeAfterBlacksMove)
 {
     Move whiteValidMove = "19-23";
     Move blackValidMove = "33-28";
@@ -80,7 +90,7 @@ TEST_F(CheckersTests, whiteCanMoveSecondTimeAfterBlacksMove)
     checkLocalValidMove(secondWhiteValidMove);
 }
 
-TEST_F(CheckersTests, BlacksCanMoveAfterReceivingWhitesMoveFromTheNetwork)
+TEST_F(CheckersTestsWhenBlacksAreMine, BlacksCanMoveAfterReceivingWhitesMoveFromTheNetwork)
 {
     Move whiteValidMove = "19-23";
     Move blackValidMove = "33-28";
@@ -89,7 +99,7 @@ TEST_F(CheckersTests, BlacksCanMoveAfterReceivingWhitesMoveFromTheNetwork)
     checkLocalValidMove(blackValidMove);
 }
 
-TEST_F(CheckersTests, BlacksCanMoveToTheRight)
+TEST_F(CheckersTestsWhenBlacksAreMine, BlacksCanMoveToTheRight)
 {
     Move whiteValidMove = "19-23";
     Move blackValidMove = "33-29";
@@ -98,13 +108,13 @@ TEST_F(CheckersTests, BlacksCanMoveToTheRight)
     checkLocalValidMove(blackValidMove);
 }
 
-TEST_F(CheckersTests, cantAllowMoveOutOfTheRightEdge)
+TEST_F(CheckersTestWhenWhitesAreMine, cantAllowMoveOutOfTheRightEdge)
 {
     Move someInvalidMove = "35-31";
     ASSERT_FALSE(moveExecutor.tryLocalMove(someInvalidMove));
 }
 
-TEST_F(CheckersTests, whitesCantMoveBackwards)
+TEST_F(CheckersTestWhenWhitesAreMine, whitesCantMoveBackwards)
 {
     Move whiteValidMove = "20-24";
     Move blackValidMove = "33-29";

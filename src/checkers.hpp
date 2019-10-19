@@ -4,14 +4,17 @@
 
 class Checkers : public MoveExecutor, public NetworkClientReceiver
 {
-    NetworkClientSender& networkClientSender;
-    UiUpdater& uiUpdater;
-    bool isMyTurn;
-    std::unique_ptr<bool> isMyColorWhite;
-
 public:
-    Checkers(NetworkClientSender& ncs, UiUpdater& uIU) : networkClientSender(ncs), uiUpdater(uIU), isMyTurn(true) { };
+    enum class Color {white, black};
+
+    Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color);
     bool isMoveValid(Move m) const;
     bool tryLocalMove(Move) override;
     void receiveFromOpponent(Move) override;
+    
+private:
+    NetworkClientSender& networkClientSender;
+    UiUpdater& uiUpdater;
+    bool isMyTurn;
+    Color color;
 };

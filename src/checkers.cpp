@@ -2,6 +2,9 @@
 #include "checkers.hpp"
 #include "checkersMove.hpp"
 
+Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), isMyTurn(true), color(color)
+{ }
+
 bool Checkers::isMoveValid(Move m) const
 {
     CheckersMove move(m);
@@ -13,23 +16,17 @@ bool Checkers::isMoveValid(Move m) const
     const bool isStoneOnTheRightEdge = 5 == move.getStartingField() %10;
     const bool allConditionsForWhites = isMoveToTheDownRight or (isMoveToTheDownLeft and !isStoneOnTheLeftEdge);
     const bool allConditionsForBlacks = isMoveToTheUpLeft or (isMoveToTheUpRight and !isStoneOnTheRightEdge);
-    return ((allConditionsForWhites and *isMyColorWhite) or (allConditionsForBlacks and !(*isMyColorWhite)));
+    return ((allConditionsForWhites and color == Color::white) or (allConditionsForBlacks and color == Color::black));
 }
 
 void Checkers::receiveFromOpponent(Move move)
 {
-    if (!isMyColorWhite)
-        isMyColorWhite = std::make_unique<bool>(false);
-
     uiUpdater.updateGameState(move);
     isMyTurn = true;
 }
 
 bool Checkers::tryLocalMove(Move move)
 {
-    if (!isMyColorWhite)
-        isMyColorWhite = std::make_unique<bool>(true);
-
     if (isMyTurn && isMoveValid(move))
     {
         networkClientSender.sendToOpponent(move);
