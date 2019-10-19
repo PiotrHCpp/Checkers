@@ -9,3 +9,5 @@ TEST(toCheckersMoveTests, canConvertMoveWithTwoDigitsValues)
     EXPECT_EQ(16, converted.getStartingField());
     EXPECT_EQ(21, converted.getLandingField());
 }
+
+//TODO: add test for moves with one digit

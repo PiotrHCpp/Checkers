@@ -11,6 +11,10 @@ bool Checkers::isMoveValid(Move m) const
     return ( isMoveToTheDownRight or (isMoveToTheDownLeft and !isStoneOnTheLeftEdge) );
 }
 
+void Checkers::receiveFromOpponent(Move move)
+{
+    uiUpdater->updateGameState(move);
+}
 
 bool Checkers::tryLocalMove(Move move)
 {

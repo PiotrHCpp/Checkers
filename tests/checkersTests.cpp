@@ -8,6 +8,11 @@ struct NetworkClientSenderMock : public NetworkClientSender
     MOCK_METHOD1(sendToOpponent, void(Move));
 };
 
+struct UiUpdaterMock : public UiUpdater
+{
+    MOCK_METHOD1(updateGameState, void(Move));
+};
+
 struct CheckersTests : public testing::Test
 {
     // NetworkClientSenderMock networkClientSenderMock;
@@ -60,4 +65,14 @@ TEST_F(CheckersTests, whiteCantMoveTwoTimesInARow)
     Move secondWhiteValidMove = "18-22";
     checkValidMove(whiteValidMove);
     ASSERT_FALSE(checkers.tryLocalMove(secondWhiteValidMove));    
+}
+
+TEST_F(CheckersTests, moveFromNetworkShouldUpdateUi)
+{
+    Move whiteValidMove = "19-23";
+    testing::StrictMock<UiUpdaterMock> uiUpdaterMock;
+    Checkers checkers2(&networkClientSenderMock, &uiUpdaterMock);
+    EXPECT_CALL(uiUpdaterMock, updateGameState(whiteValidMove));
+    NetworkClientReceiver& networkClientReceiver = checkers2;
+    networkClientReceiver.receiveFromOpponent(whiteValidMove);
 }
