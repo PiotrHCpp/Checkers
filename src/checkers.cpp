@@ -14,9 +14,10 @@ bool Checkers::isMoveValid(Move m) const
 
 bool Checkers::tryLocalMove(Move move)
 {
-    if (isMoveValid(move))
+    if (isMyTurn && isMoveValid(move))
     {
         networkClientSender->sendToOpponent(move);
+        isMyTurn = false;
         return true;
     }
     return false;

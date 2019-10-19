@@ -53,3 +53,11 @@ TEST_P(CheckersTestValidMoves, test)
 }
 
 INSTANTIATE_TEST_SUITE_P(P, CheckersTestValidMoves, ::testing::Values("18-23", "16-21", "19-23"));
+
+TEST_F(CheckersTests, whiteCantMoveTwoTimesInARow)
+{
+    Move whiteValidMove = "19-23";
+    Move secondWhiteValidMove = "18-22";
+    checkValidMove(whiteValidMove);
+    ASSERT_FALSE(checkers.tryLocalMove(secondWhiteValidMove));    
+}
