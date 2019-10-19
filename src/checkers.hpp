@@ -4,5 +4,5 @@
 class Checkers : public MoveExecutor
 {
 public:
-    bool tryLocalMove(Move);
+    bool tryLocalMove(Move) override;
 };
