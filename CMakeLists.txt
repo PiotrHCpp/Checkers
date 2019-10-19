@@ -56,6 +56,7 @@ project(checkers)
 #endif (UNIX)
 
 set(TEST_SRC_LIST
+  src/checkers.cpp
   tests/checkersTests.cpp 
 )
 

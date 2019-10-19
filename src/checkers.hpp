@@ -4,8 +4,5 @@
 class Checkers
 {
 public:
-    bool tryLocalMove(Move)
-    {
-        return true;
-    }
+    bool tryLocalMove(Move);
 };
