@@ -37,12 +37,13 @@ TEST_F(CheckersTests, MoveExecutorInterfaceIsImplemented)
     moveExecutor.tryLocalMove(someMove);
 }
 
-TEST_F(CheckersTests, checkersMustAllowValidMove)
+struct CheckersTestValidMoves : public CheckersTests, public ::testing::WithParamInterface<Move>
 {
-    checkValidMove("18-23");
+};
+
+TEST_P(CheckersTestValidMoves, test)
+{
+    checkValidMove(GetParam());
 }
 
-TEST_F(CheckersTests, checkersMustAllowAnotherValidMove)
-{
-    checkValidMove("16-21");
-}
+INSTANTIATE_TEST_CASE_P(P, CheckersTestValidMoves, ::testing::Values("18-23", "16-21", "19-23"));
