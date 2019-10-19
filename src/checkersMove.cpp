@@ -1,9 +1,17 @@
 #include "checkersMove.hpp"
 
-CheckersMove toCheckersMove(const Move& move)
+CheckersMove::CheckersMove(const Move& move)
 {
-    CheckersMove retValue;
-    retValue.startingField = std::stoi(move.substr(0, 2));
-    retValue.landingField = std::stoi(move.substr(3, 2));
-    return retValue;
+    startingField = std::stoi(move.substr(0, 2));
+    landingField = std::stoi(move.substr(3, 2));
+}
+
+unsigned CheckersMove::getStartingField() const
+{
+    return startingField;
+}
+
+unsigned CheckersMove::getLandingField() const
+{
+    return landingField;
 }

@@ -1,10 +1,14 @@
 #pragma once
 #include "gameInterfaces.hpp"
 
-struct CheckersMove
+class CheckersMove
 {
+public:
+    CheckersMove(const Move& move);
+    unsigned getStartingField() const;
+    unsigned getLandingField() const;
+
+private:
     unsigned startingField;
     unsigned landingField;    
 };
-
-CheckersMove toCheckersMove(const Move& move);

@@ -5,7 +5,7 @@
 
 TEST(toCheckersMoveTests, canConvertMoveWithTwoDigitsValues)
 {
-    CheckersMove converted = toCheckersMove("16-21");
-    EXPECT_EQ(16, converted.startingField);
-    EXPECT_EQ(21, converted.landingField);
+    CheckersMove converted("16-21");
+    EXPECT_EQ(16, converted.getStartingField());
+    EXPECT_EQ(21, converted.getLandingField());
 }
