@@ -103,3 +103,14 @@ TEST_F(CheckersTests, cantAllowMoveOutOfTheRightEdge)
     Move someInvalidMove = "35-31";
     ASSERT_FALSE(moveExecutor.tryLocalMove(someInvalidMove));
 }
+
+TEST_F(CheckersTests, whitesCantMoveBackwards)
+{
+    Move whiteValidMove = "20-24";
+    Move blackValidMove = "33-29";
+    Move whiteBackwardMove = "24-20";
+
+    checkLocalValidMove(whiteValidMove);
+    checkReceivedMove(blackValidMove);
+    ASSERT_FALSE(moveExecutor.tryLocalMove(whiteBackwardMove));
+}
