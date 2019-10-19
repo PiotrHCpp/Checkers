@@ -15,7 +15,6 @@ struct UiUpdaterMock : public UiUpdater
 
 struct CheckersTests : public testing::Test
 {
-    // NetworkClientSenderMock networkClientSenderMock;
     testing::StrictMock<NetworkClientSenderMock> networkClientSenderMock;
     testing::StrictMock<UiUpdaterMock> uiUpdaterMock;
     MoveExecutor& moveExecutor = checkers;
@@ -26,10 +25,16 @@ struct CheckersTests : public testing::Test
     CheckersTests() : checkers(Checkers(networkClientSenderMock, uiUpdaterMock))
     { }
 
-    void checkValidMove(const Move& move)
+    void checkLocalValidMove(const Move& move)
     {
         EXPECT_CALL(networkClientSenderMock, sendToOpponent(move));
         ASSERT_TRUE(moveExecutor.tryLocalMove(move));
+    }
+
+    void checkReceivedMove(Move move)
+    {
+        EXPECT_CALL(uiUpdaterMock, updateGameState(move));
+        networkClientReceiver.receiveFromOpponent(move);
     }
 };
 
@@ -51,7 +56,7 @@ struct CheckersTestValidMoves : public CheckersTests, public ::testing::WithPara
 
 TEST_P(CheckersTestValidMoves, test)
 {
-    checkValidMove(GetParam());
+    checkLocalValidMove(GetParam());
 }
 
 INSTANTIATE_TEST_SUITE_P(P, CheckersTestValidMoves, ::testing::Values("18-23", "16-21", "19-23"));
@@ -60,15 +65,14 @@ TEST_F(CheckersTests, whiteCantMoveTwoTimesInARow)
 {
     Move whiteValidMove = "19-23";
     Move secondWhiteValidMove = "18-22";
-    checkValidMove(whiteValidMove);
+    checkLocalValidMove(whiteValidMove);
     ASSERT_FALSE(moveExecutor.tryLocalMove(secondWhiteValidMove));    
 }
 
 TEST_F(CheckersTests, moveFromNetworkShouldUpdateUi)
 {
     Move whiteValidMove = "19-23";
-    EXPECT_CALL(uiUpdaterMock, updateGameState(whiteValidMove));
-    networkClientReceiver.receiveFromOpponent(whiteValidMove);
+    checkReceivedMove(whiteValidMove);
 }
 
 TEST_F(CheckersTests, whiteCanMoveSecondTimeAfterBlacksMove)
@@ -77,10 +81,9 @@ TEST_F(CheckersTests, whiteCanMoveSecondTimeAfterBlacksMove)
     Move blackValidMove = "33-28";
     Move secondWhiteValidMove = "18-22";
 
-    checkValidMove(whiteValidMove);
-    EXPECT_CALL(uiUpdaterMock, updateGameState(blackValidMove));
-    networkClientReceiver.receiveFromOpponent(blackValidMove);
-    checkValidMove(secondWhiteValidMove);
+    checkLocalValidMove(whiteValidMove);
+    checkReceivedMove(blackValidMove);
+    checkLocalValidMove(secondWhiteValidMove);
 }
 
 TEST_F(CheckersTests, BlacksCanMoveAfterReceivingWhitesMoveFromTheNetwork)
@@ -88,9 +91,8 @@ TEST_F(CheckersTests, BlacksCanMoveAfterReceivingWhitesMoveFromTheNetwork)
     Move whiteValidMove = "19-23";
     Move blackValidMove = "33-28";
 
-    EXPECT_CALL(uiUpdaterMock, updateGameState(whiteValidMove));
-    networkClientReceiver.receiveFromOpponent(whiteValidMove);
-    checkValidMove(blackValidMove);
+    checkReceivedMove(whiteValidMove);
+    checkLocalValidMove(blackValidMove);
 }
 
 TEST_F(CheckersTests, BlacksCanMoveToTheRight)
@@ -98,7 +100,6 @@ TEST_F(CheckersTests, BlacksCanMoveToTheRight)
     Move whiteValidMove = "19-23";
     Move blackValidMove = "33-29";
 
-    EXPECT_CALL(uiUpdaterMock, updateGameState(whiteValidMove));
-    networkClientReceiver.receiveFromOpponent(whiteValidMove);
-    checkValidMove(blackValidMove);
+    checkReceivedMove(whiteValidMove);
+    checkLocalValidMove(blackValidMove);
 }
