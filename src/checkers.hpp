@@ -1,6 +1,7 @@
 #pragma once
 #include "gameInterfaces.hpp"
 #include <memory>
+#include <vector>
 
 class Checkers : public MoveExecutor, public NetworkClientReceiver
 {
@@ -17,4 +18,5 @@ private:
     UiUpdater& uiUpdater;
     bool isMyTurn;
     Color color;
+    std::vector<bool> fields;
 };

@@ -30,7 +30,7 @@ struct CheckersTests : public testing::Test
         EXPECT_CALL(networkClientSenderMock, sendToOpponent(move));
         ASSERT_TRUE(moveExecutor.tryLocalMove(move));
     }
-
+ 
     void checkReceivedMove(Move move)
     {
         EXPECT_CALL(uiUpdaterMock, updateGameState(move));
@@ -134,3 +134,13 @@ TEST_F(CheckersTestsWhenBlacksAreMine, BlacksCantStart)
     ASSERT_FALSE(moveExecutor.tryLocalMove(blackValidMove));
 }
 
+TEST_F(CheckersTestWhenWhitesAreMine, CantMoveWhitesToTheOccupiedField)
+{
+    Move whiteValidMove = "19-23";
+    Move blackValidMove = "33-29";
+    Move whiteMoveToOccupiedField = "18-23";
+
+    checkLocalValidMove(whiteValidMove);
+    checkReceivedMove(blackValidMove);
+    ASSERT_FALSE(moveExecutor.tryLocalMove(whiteMoveToOccupiedField));
+}

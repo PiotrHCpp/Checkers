@@ -2,7 +2,7 @@
 #include "checkers.hpp"
 #include "checkersMove.hpp"
 
-Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color)
+Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color), fields(std::vector<bool>(51, false))
 { 
     isMyTurn = color == Color::white;
 }
@@ -29,8 +29,10 @@ void Checkers::receiveFromOpponent(Move move)
 
 bool Checkers::tryLocalMove(Move move)
 {
-    if (isMyTurn && isMoveValid(move))
+    CheckersMove m(move);
+    if (isMyTurn && isMoveValid(move) && fields[m.getLandingField()] == false)
     {
+        fields[m.getLandingField()] = true;
         networkClientSender.sendToOpponent(move);
         isMyTurn = false;
         return true;
