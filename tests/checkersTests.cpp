@@ -144,3 +144,14 @@ TEST_F(CheckersTestWhenWhitesAreMine, CantMoveWhitesToTheOccupiedField)
     checkReceivedMove(blackValidMove);
     ASSERT_FALSE(moveExecutor.tryLocalMove(whiteMoveToOccupiedField));
 }
+
+TEST_F(CheckersTestWhenWhitesAreMine, CantMoveWhitesToTheFieldOccupiedByBlacks)
+{
+    Move whiteValidMove = "19-23";
+    Move blackValidMove = "32-28";
+    Move whiteMoveToOccupiedField = "23-28";
+
+    checkLocalValidMove(whiteValidMove);
+    checkReceivedMove(blackValidMove);
+    ASSERT_FALSE(moveExecutor.tryLocalMove(whiteMoveToOccupiedField));
+}

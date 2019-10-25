@@ -19,9 +19,11 @@ bool Checkers::isMoveValid(const CheckersMove& move) const
     return ((allConditionsForWhites and color == Color::white) or (allConditionsForBlacks and color == Color::black));
 }
 
-void Checkers::receiveFromOpponent(Move move)
+void Checkers::receiveFromOpponent(Move m)
 {
-    uiUpdater.updateGameState(move);
+    CheckersMove move(m);
+    fields[move.getLandingField()] = true;
+    uiUpdater.updateGameState(m);
     isMyTurn = true;
 }
 
