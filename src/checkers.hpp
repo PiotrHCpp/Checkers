@@ -4,20 +4,21 @@
 #include <memory>
 #include <vector>
 
+typedef std::vector<bool> Board;
+enum class Color {white, black};
+
 class Checkers : public MoveExecutor, public NetworkClientReceiver
 {
 public:
-    enum class Color {white, black};
     Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color);
     bool tryLocalMove(Move) override;
     void receiveFromOpponent(Move) override;
     
 private:
-    bool isMoveValid(const CheckersMove& move) const;
     void setLandingfieldOccupied(const CheckersMove& move);
     NetworkClientSender& networkClientSender;
     UiUpdater& uiUpdater;
     bool isMyTurn;
     Color color;
-    std::vector<bool> occupiedFields;
+    Board occupiedFields;
 };

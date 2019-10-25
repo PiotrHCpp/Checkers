@@ -22,7 +22,7 @@ struct CheckersTests : public testing::Test
 
     Checkers checkers;
     
-    CheckersTests(Checkers::Color color) : checkers(Checkers(networkClientSenderMock, uiUpdaterMock, color))
+    CheckersTests(Color color) : checkers(Checkers(networkClientSenderMock, uiUpdaterMock, color))
     { }
 
     void checkLocalValidMove(const Move& move)
@@ -40,12 +40,12 @@ struct CheckersTests : public testing::Test
 
 struct CheckersTestsWhenBlacksAreMine : public CheckersTests
 {
-    CheckersTestsWhenBlacksAreMine() : CheckersTests(Checkers::Color::black) {}
+    CheckersTestsWhenBlacksAreMine() : CheckersTests(Color::black) {}
 };
 
 struct CheckersTestWhenWhitesAreMine : public CheckersTests
 {
-    CheckersTestWhenWhitesAreMine() : CheckersTests(Checkers::Color::white) {}
+    CheckersTestWhenWhitesAreMine() : CheckersTests(Color::white) {}
 };
 
 TEST_F(CheckersTestWhenWhitesAreMine, checkersMusntAllowInvalidMove)
@@ -146,6 +146,17 @@ TEST_F(CheckersTestWhenWhitesAreMine, CantMoveWhitesToTheOccupiedField)
 }
 
 TEST_F(CheckersTestWhenWhitesAreMine, CantMoveWhitesToTheFieldOccupiedByBlacks)
+{
+    Move whiteValidMove = "19-23";
+    Move blackValidMove = "32-28";
+    Move whiteMoveToOccupiedField = "23-28";
+
+    checkLocalValidMove(whiteValidMove);
+    checkReceivedMove(blackValidMove);
+    ASSERT_FALSE(moveExecutor.tryLocalMove(whiteMoveToOccupiedField));
+}
+
+TEST_F(CheckersTestWhenWhitesAreMine, MoveWhiteStone)
 {
     Move whiteValidMove = "19-23";
     Move blackValidMove = "32-28";
