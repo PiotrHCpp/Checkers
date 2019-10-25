@@ -1,15 +1,13 @@
 #include <string>
 #include "checkers.hpp"
-#include "checkersMove.hpp"
 
 Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color), fields(std::vector<bool>(51, false))
 { 
     isMyTurn = color == Color::white;
 }
 
-bool Checkers::isMoveValid(Move m) const
+bool Checkers::isMoveValid(const CheckersMove& move) const
 {
-    CheckersMove move(m);
     const bool isStoneOnTheLeftEdge = 6 == move.getStartingField() %10;
     const bool isMoveToTheDownLeft = 4 == move.getFieldDifference();
     const bool isMoveToTheDownRight = 5 == move.getFieldDifference();
@@ -30,7 +28,8 @@ void Checkers::receiveFromOpponent(Move move)
 bool Checkers::tryLocalMove(Move move)
 {
     CheckersMove m(move);
-    if (isMyTurn && isMoveValid(move) && fields[m.getLandingField()] == false)
+    const bool isLandingFieldEmpty = false == fields[m.getLandingField()];
+    if (isMyTurn && isMoveValid(m) && isLandingFieldEmpty)
     {
         fields[m.getLandingField()] = true;
         networkClientSender.sendToOpponent(move);
