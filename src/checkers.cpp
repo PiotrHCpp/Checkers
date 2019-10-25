@@ -1,9 +1,14 @@
 #include <string>
 #include "checkers.hpp"
 
-Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color), fields(std::vector<bool>(51, false))
+Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color), occupiedFields(std::vector<bool>(51, false))
 { 
     isMyTurn = color == Color::white;
+}
+
+void Checkers::setLandingfieldOccupied(const CheckersMove& move)
+{
+    occupiedFields[move.getLandingField()] = true;
 }
 
 bool Checkers::isMoveValid(const CheckersMove& move) const
@@ -22,7 +27,7 @@ bool Checkers::isMoveValid(const CheckersMove& move) const
 void Checkers::receiveFromOpponent(Move m)
 {
     CheckersMove move(m);
-    fields[move.getLandingField()] = true;
+    setLandingfieldOccupied(m);
     uiUpdater.updateGameState(m);
     isMyTurn = true;
 }
@@ -30,10 +35,10 @@ void Checkers::receiveFromOpponent(Move m)
 bool Checkers::tryLocalMove(Move move)
 {
     CheckersMove m(move);
-    const bool isLandingFieldEmpty = false == fields[m.getLandingField()];
+    const bool isLandingFieldEmpty = false == occupiedFields[m.getLandingField()];
     if (isMyTurn && isMoveValid(m) && isLandingFieldEmpty)
     {
-        fields[m.getLandingField()] = true;
+        setLandingfieldOccupied(m);
         networkClientSender.sendToOpponent(move);
         isMyTurn = false;
         return true;

@@ -14,9 +14,10 @@ public:
     
 private:
     bool isMoveValid(const CheckersMove& move) const;
+    void setLandingfieldOccupied(const CheckersMove& move);
     NetworkClientSender& networkClientSender;
     UiUpdater& uiUpdater;
     bool isMyTurn;
     Color color;
-    std::vector<bool> fields;
+    std::vector<bool> occupiedFields;
 };
