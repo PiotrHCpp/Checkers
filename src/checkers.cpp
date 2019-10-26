@@ -9,7 +9,7 @@ BoardPtr initializeBoard()
     return occupiedFields;
 }
 
-Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color)
+Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU)
 { 
     isMyTurn = color == Color::white;
     moveValidator = std::make_unique<MoveValidator>(initializeBoard(), color);
