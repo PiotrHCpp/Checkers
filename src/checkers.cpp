@@ -2,7 +2,7 @@
 #include "checkers.hpp"
 #include "moveValidator.hpp"
 
-Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color), occupiedFields(std::vector<bool>(51, false))
+Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color)
 { 
     isMyTurn = color == Color::white;
     initializeBoard();
@@ -37,9 +37,7 @@ bool Checkers::tryLocalMove(Move move)
 
 void Checkers::initializeBoard()
 {
-    for (int i=1; i<=20; ++i)
-        occupiedFields[i]=true;
-
-    for (int j=31; j<=50; ++j)
-        occupiedFields[j]=true;
+    occupiedFields = std::vector<bool>(51, true);
+    for (int i=21; i<=30; ++i)
+        occupiedFields[i]=false;
 }
