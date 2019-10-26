@@ -1,18 +1,17 @@
 #include <string>
 #include "checkers.hpp"
-#include "moveValidator.hpp"
 
 Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color)
 { 
     isMyTurn = color == Color::white;
     initializeBoard();
+    moveValidator = std::make_unique<MoveValidator>(occupiedFields, color);
 }
 
 void Checkers::receiveFromOpponent(Move m)
 {
     CheckersMove move(m);
-    MoveValidator moveValidator(move, occupiedFields, color);
-    moveValidator.setLandingfieldOccupied(move);
+    moveValidator->setLandingfieldOccupied(move);
     uiUpdater.updateGameState(m);
     isMyTurn = true;
 }
@@ -20,10 +19,10 @@ void Checkers::receiveFromOpponent(Move m)
 bool Checkers::tryLocalMove(Move m)
 {
     CheckersMove move(m);
-    MoveValidator moveValidator(move, occupiedFields, color);
-    if (isMyTurn && moveValidator())
+
+    if (isMyTurn && moveValidator->operator()(move))
     {
-        moveValidator.setLandingfieldOccupied(move);
+        moveValidator->setLandingfieldOccupied(move);
         networkClientSender.sendToOpponent(m);
         isMyTurn = false;
         return true;

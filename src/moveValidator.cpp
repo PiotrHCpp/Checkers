@@ -1,10 +1,10 @@
 #include "moveValidator.hpp"
 
-MoveValidator::MoveValidator(const CheckersMove& move, Board& occupiedFields, Color color) :
-    move(move), occupiedFields(occupiedFields), color(color)
+MoveValidator::MoveValidator(Board& occupiedFields, Color color) :
+    occupiedFields(occupiedFields), color(color)
 { }
 
-bool MoveValidator::operator()()
+bool MoveValidator::operator()(const CheckersMove& move)
 {
     const bool isLandingFieldEmpty = false == occupiedFields[move.getLandingField()];
     const bool isStartingFieldNotEmpty = true == occupiedFields[move.getStartingField()];

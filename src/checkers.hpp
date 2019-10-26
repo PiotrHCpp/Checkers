@@ -1,11 +1,8 @@
 #pragma once
 #include "gameInterfaces.hpp"
 #include "checkersMove.hpp"
+#include "moveValidator.hpp"
 #include <memory>
-#include <vector>
-
-typedef std::vector<bool> Board;
-enum class Color {white, black};
 
 class Checkers : public MoveExecutor, public NetworkClientReceiver
 {
@@ -20,5 +17,6 @@ private:
     UiUpdater& uiUpdater;
     bool isMyTurn;
     Color color;
+    std::unique_ptr<MoveValidator> moveValidator;
     Board occupiedFields;
 };
