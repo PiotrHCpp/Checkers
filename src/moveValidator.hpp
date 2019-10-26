@@ -5,13 +5,14 @@
 class MoveValidator
 {
 public:
-    MoveValidator(const CheckersMove& move, const Board& occupiedFields, Color color);
+    MoveValidator(const CheckersMove& move, Board& occupiedFields, Color color);
+    void setLandingfieldOccupied(const CheckersMove& move);
     bool operator()();
     
 private:
     bool isMoveValid(const CheckersMove& move) const;
         
     const CheckersMove& move;
-    const Board& occupiedFields;
+    Board& occupiedFields;
     const Color color;
 };

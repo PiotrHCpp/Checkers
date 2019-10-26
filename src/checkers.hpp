@@ -16,7 +16,6 @@ public:
     
 private:
     void initializeBoard();
-    void setLandingfieldOccupied(const CheckersMove& move);
     NetworkClientSender& networkClientSender;
     UiUpdater& uiUpdater;
     bool isMyTurn;

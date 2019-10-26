@@ -8,27 +8,23 @@ Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : netw
     initializeBoard();
 }
 
-void Checkers::setLandingfieldOccupied(const CheckersMove& move)
-{
-    occupiedFields[move.getLandingField()] = true;
-}
-
 void Checkers::receiveFromOpponent(Move m)
 {
     CheckersMove move(m);
-    setLandingfieldOccupied(m);
+    MoveValidator moveValidator(move, occupiedFields, color);
+    moveValidator.setLandingfieldOccupied(move);
     uiUpdater.updateGameState(m);
     isMyTurn = true;
 }
 
-bool Checkers::tryLocalMove(Move move)
+bool Checkers::tryLocalMove(Move m)
 {
-    CheckersMove m(move);
-    MoveValidator moveValidator(m, occupiedFields, color);
+    CheckersMove move(m);
+    MoveValidator moveValidator(move, occupiedFields, color);
     if (isMyTurn && moveValidator())
     {
-        setLandingfieldOccupied(m);
-        networkClientSender.sendToOpponent(move);
+        moveValidator.setLandingfieldOccupied(move);
+        networkClientSender.sendToOpponent(m);
         isMyTurn = false;
         return true;
     }

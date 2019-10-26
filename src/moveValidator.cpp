@@ -1,6 +1,6 @@
 #include "moveValidator.hpp"
 
-MoveValidator::MoveValidator(const CheckersMove& move, const Board& occupiedFields, Color color) :
+MoveValidator::MoveValidator(const CheckersMove& move, Board& occupiedFields, Color color) :
     move(move), occupiedFields(occupiedFields), color(color)
 { }
 
@@ -22,4 +22,9 @@ bool MoveValidator::isMoveValid(const CheckersMove& move) const
     const bool allConditionsForWhites = isMoveToTheDownRight or (isMoveToTheDownLeft and !isStoneOnTheLeftEdge);
     const bool allConditionsForBlacks = isMoveToTheUpLeft or (isMoveToTheUpRight and !isStoneOnTheRightEdge);
     return ((allConditionsForWhites and color == Color::white) or (allConditionsForBlacks and color == Color::black));
+}
+
+void MoveValidator::setLandingfieldOccupied(const CheckersMove& move)
+{
+    occupiedFields[move.getLandingField()] = true;
 }
