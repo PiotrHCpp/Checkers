@@ -58,6 +58,7 @@ project(checkers)
 set(TEST_SRC_LIST
   src/checkers.cpp
   src/checkersMove.cpp
+  src/moveValidator.cpp
   tests/checkersTests.cpp 
   tests/checkersMoveTests.cpp
 )
