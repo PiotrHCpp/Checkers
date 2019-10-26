@@ -1,13 +1,13 @@
 #include "moveValidator.hpp"
 
-MoveValidator::MoveValidator(Board& occupiedFields, Color color) :
-    occupiedFields(occupiedFields), color(color)
+MoveValidator::MoveValidator(BoardPtr occupiedFields, Color color) :
+    occupiedFields(std::move(occupiedFields)), color(color)
 { }
 
 bool MoveValidator::operator()(const CheckersMove& move)
 {
-    const bool isLandingFieldEmpty = false == occupiedFields[move.getLandingField()];
-    const bool isStartingFieldNotEmpty = true == occupiedFields[move.getStartingField()];
+    const bool isLandingFieldEmpty = false == (*occupiedFields)[move.getLandingField()];
+    const bool isStartingFieldNotEmpty = true == (*occupiedFields)[move.getStartingField()];
     return isMoveValid(move) && isLandingFieldEmpty && isStartingFieldNotEmpty;
 }
 
@@ -26,5 +26,5 @@ bool MoveValidator::isMoveValid(const CheckersMove& move) const
 
 void MoveValidator::setLandingfieldOccupied(const CheckersMove& move)
 {
-    occupiedFields[move.getLandingField()] = true;
+    (*occupiedFields)[move.getLandingField()] = true;
 }

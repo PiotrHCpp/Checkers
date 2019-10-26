@@ -12,11 +12,9 @@ public:
     void receiveFromOpponent(Move) override;
     
 private:
-    void initializeBoard();
     NetworkClientSender& networkClientSender;
     UiUpdater& uiUpdater;
     bool isMyTurn;
     Color color;
     std::unique_ptr<MoveValidator> moveValidator;
-    Board occupiedFields;
 };
