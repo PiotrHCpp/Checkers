@@ -15,6 +15,7 @@ public:
     void receiveFromOpponent(Move) override;
     
 private:
+    void initializeBoard();
     void setLandingfieldOccupied(const CheckersMove& move);
     NetworkClientSender& networkClientSender;
     UiUpdater& uiUpdater;

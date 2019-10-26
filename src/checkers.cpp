@@ -5,6 +5,7 @@
 Checkers::Checkers(NetworkClientSender& ncs, UiUpdater& uIU, Color color) : networkClientSender(ncs), uiUpdater(uIU), color(color), occupiedFields(std::vector<bool>(51, false))
 { 
     isMyTurn = color == Color::white;
+    initializeBoard();
 }
 
 void Checkers::setLandingfieldOccupied(const CheckersMove& move)
@@ -32,4 +33,13 @@ bool Checkers::tryLocalMove(Move move)
         return true;
     }
     return false;
+}
+
+void Checkers::initializeBoard()
+{
+    for (int i=1; i<=20; ++i)
+        occupiedFields[i]=true;
+
+    for (int j=31; j<=50; ++j)
+        occupiedFields[j]=true;
 }

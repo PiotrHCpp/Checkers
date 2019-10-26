@@ -7,7 +7,8 @@ MoveValidator::MoveValidator(const CheckersMove& move, const Board& occupiedFiel
 bool MoveValidator::operator()()
 {
     const bool isLandingFieldEmpty = false == occupiedFields[move.getLandingField()];
-    return isMoveValid(move) && isLandingFieldEmpty;
+    const bool isStartingFieldNotEmpty = true == occupiedFields[move.getStartingField()];
+    return isMoveValid(move) && isLandingFieldEmpty && isStartingFieldNotEmpty;
 }
 
 bool MoveValidator::isMoveValid(const CheckersMove& move) const

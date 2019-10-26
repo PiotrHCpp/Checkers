@@ -166,3 +166,9 @@ TEST_F(CheckersTestWhenWhitesAreMine, MoveWhiteStone)
     checkReceivedMove(blackValidMove);
     ASSERT_FALSE(moveExecutor.tryLocalMove(whiteMoveToOccupiedField));
 }
+
+TEST_F(CheckersTestWhenWhitesAreMine, CantMoveWhitesFromEmptyField)
+{
+    Move whiteInvalidMove = "21-26";
+    ASSERT_FALSE(moveExecutor.tryLocalMove(whiteInvalidMove));
+}
